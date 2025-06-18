@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Head Girl Campaign</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap');
+
+    /* CSS Variables for themes */
+    :root {
+      --background: #121926; /* deep navy */
+      --background-alt: #1f2937; /* dark slate */
+      --background-alt-light: #e3edf7; /* light grey-blue background alt for light mode */
+      --card-background: #2a354b; /* dark card background */
+      --card-background-light: #ffffff;
+      --text-primary: #faf8f5; /* bright soft white */
+      --text-secondary: #e9e5df;
+      --text-accent: #f9d976; /* bright warm gold */
+      --text-accent-hover: #fff7cc;
+      --text-link: #f9d976;
+      --text-link-hover: #fff7cc;
+      --header-background: linear-gradient(135deg, #1f2937, #3b475b);
+      --header-background-light: linear-gradient(135deg, #cfd8dc, #eceff1);
+      --shadow-color: rgba(249, 217, 118, 0.55);
+      --shadow-color-light: rgba(0,0,0,0.1);
+      --box-shadow: 0 8px 30px var(--shadow-color);
+      --box-shadow-light: 0 8px 30px var(--shadow-color-light);
+      --text-shadow-accent: 0 0 10px rgba(249, 217, 118, 0.85);
+      --text-shadow-accent-light: none;
+      --agenda-icon-filter: drop-shadow(0 0 3px rgba(249, 217, 118, 0.9));
+      --agenda-icon-filter-light: none;
+    }
+
+    /* Light theme overrides */
+    body.light-theme {
+      --background: #f0f5fb; /* light grey-blue */
+      --background-alt: var(--background-alt-light);
+      --card-background: var(--card-background-light);
+      --text-primary: #222222;
+      --text-secondary: #555555;
+      --text-accent: #b18a00;
+      --text-accent-hover: #d4b600;
+      --text-link: #b18a00;
+      --text-link-hover: #d4b600;
+      --header-background: var(--header-background-light);
+      --shadow-color: rgba(0, 33, 71, 0.15); /* stronger shadow with blue tint */
+      --box-shadow: 0 10px 40px rgba(0, 33, 71, 0.15);
+      --text-shadow-accent: var(--text-shadow-accent-light);
+      --agenda-icon-filter: var(--agenda-icon-filter-light);
+
+      /* Increase font size globally in light mode */
+      font-size: 1.1rem;
+    }
+    /* Increase some headings and content sizes in light mode */
+    body.light-theme h1 {
+      font-size: 3.8rem;
+    }
+    body.light-theme h2 {
+      font-size: 2.8rem;
+    }
+    body.light-theme .agenda-title {
+      font-size: 1.45rem;
+    }
+    body.light-theme .accordion-header {
+      font-size: 1.3rem;
+    }
+    body.light-theme .accordion-content {
+      font-size: 1.15rem;
+    }
+
+    /* Additional header highlight in light mode */
+    body.light-theme header {
+      border: 1.5px solid rgba(177, 138, 0, 0.5);
+      box-shadow: 0 12px 40px rgba(177, 138, 0, 0.25);
+    }
+
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: var(--background);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      transition: background-color 0.4s ease, color 0.4s ease, font-size 0.4s ease;
+      font-size: 1rem;
+    }
+    h1, h2 {
+      margin-bottom: 10px;
+      color: var(--text-accent);
+      letter-spacing: 1.1px;
+      text-shadow: var(--text-shadow-accent);
+      font-weight: 700;
+      transition: color 0.4s ease, text-shadow 0.4s ease, font-size 0.4s ease;
+    }
+    header {
+      width: 100%;
+      max-width: 900px;
+      padding: 40px 25px;
+      background: var(--header-background);
+      border-radius: 28px;
+      box-shadow: var(--box-shadow);
+      margin-bottom: 20px;
+      transition: background 0.4s ease, box-shadow 0.4s ease, border 0.4s ease;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    header > div, header > h1, header > p {
+      flex: 1 1 100%;
+      text-align: center;
+    }
+    @media(min-width: 480px) {
+      header > h1, header > p, header > div.name {
+        flex: none;
+        text-align: left;
+      }
+      header > h1 {
+        flex-grow: 1;
+      }
+      header > p {
+        margin-left: 16px;
+        font-style: italic;
+      }
+      header > div.name {
+        margin-left: 16px;
+        font-weight: 700;
+        font-size: 1.6rem;
+        color: var(--text-accent);
+        align-self: center;
+        transition: color 0.4s ease;
+      }
+    }
+
+    /* Vote Button below header */
+    #vote-button {
+      background-color: var(--text-accent);
+      color: var(--background);
+      border: none;
+      border-radius: 30px;
+      padding: 14px 24px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 12px rgba(249, 217, 118, 0.5);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      margin-bottom: 40px;
+      user-select: none;
+      max-width: 200px;
+      width: 100%;
+      text-align: center;
+    }
+    #vote-button:hover,
+    #vote-button:focus {
+      background-color: var(--text-accent-hover);
+      box-shadow: 0 8px 16px rgba(249, 217, 118, 0.7);
+      outline: none;
+    }
+
+    /* Dark/Light mode toggle button */
+    #theme-toggle {
+      background: transparent;
+      border: 2px solid var(--text-accent);
+      border-radius: 30px;
+      color: var(--text-accent);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      user-select: none;
+      flex: 0 0 auto;
+      text-align: center;
+      white-space: nowrap;
+      min-width: 110px;
+    }
+    #theme-toggle:hover,
+    #theme-toggle:focus {
+      background-color: var(--text-accent);
+      color: var(--background);
+      outline: none;
+    }
+
+    main {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    /* Agendas Section */
+    section.agendas {
+      background: var(--background-alt);
+      padding: 30px 40px;
+      border-radius: 25px;
+      margin-bottom: 40px;
+      box-shadow: 0 8px 30px rgba(249, 217, 118, 0.25);
+      transition: background 0.4s ease, box-shadow 0.4s ease, border 0.4s ease;
+    }
+    body.light-theme section.agendas {
+      box-shadow: 0 12px 45px rgba(0,33,71,0.18);
+      border: 1px solid rgba(177, 138, 0, 0.3);
+    }
+    section.agendas h2 {
+      margin-bottom: 30px;
+      font-size: 2.6rem;
+      text-align: center;
+    }
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+      gap: 24px;
+    }
+    .agenda-card {
+      background: var(--card-background);
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(249, 217, 118, 0.25);
+      padding: 20px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease, border 0.4s ease;
+      cursor: default;
+      color: var(--text-primary);
+    }
+    body.light-theme .agenda-card {
+      box-shadow: 0 10px 30px rgba(0,33,71,0.18);
+      border: 1px solid rgba(177, 138, 0, 0.4);
+    }
+    .agenda-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 16px 30px var(--shadow-color);
+    }
+    body.light-theme .agenda-card:hover {
+      box-shadow: 0 20px 40px rgba(0,33,71,0.25);
+    }
+    .agenda-icon {
+      font-size: 2.8rem;
+      flex-shrink: 0;
+      margin-bottom: 12px;
+      color: var(--text-accent);
+      user-select: none;
+      filter: var(--agenda-icon-filter);
+      transition: color 0.4s ease, filter 0.4s ease;
+    }
+    .agenda-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      user-select: text;
+      transition: color 0.4s ease;
+    }
+    .agenda-explanation {
+      font-size: 1.05rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+      text-shadow: 0 0 2px rgba(0 0 0 / 0.3);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease, color 0.4s ease;
+      padding: 0;
+      user-select: text;
+    }
+    .agenda-explanation.expanded {
+      max-height: 500px; /* enough to show content */
+      padding-top: 8px;
+    }
+    .see-more-btn {
+      margin-top: 10px;
+      background: transparent;
+      border: none;
+      color: var(--text-accent);
+      font-weight: 700;
+      cursor: pointer;
+      align-self: flex-start;
+      text-shadow: 0 0 3px rgba(249, 217, 118, 0.8);
+      user-select: none;
+      transition: color 0.3s ease;
+    }
+    .see-more-btn:hover {
+      color: var(--text-accent-hover);
+    }
+
+    /* Questions Section */
+    section.questions {
+      background: var(--background-alt);
+      padding: 30px 40px;
+      border-radius: 25px;
+      box-shadow: 0 8px 30px rgba(249, 217, 118, 0.25);
+      transition: background 0.4s ease, box-shadow 0.4s ease, border 0.4s ease;
+    }
+    body.light-theme section.questions {
+      box-shadow: 0 12px 45px rgba(0,33,71,0.18);
+      border: 1px solid rgba(177, 138, 0, 0.3);
+    }
+    section.questions h2 {
+      font-size: 2.6rem;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .accordion {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .accordion-item {
+      background: var(--card-background);
+      border-radius: 18px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 18px rgba(249, 217, 118, 0.25);
+      overflow: hidden;
+      cursor: pointer;
+      transition: background 0.3s ease, box-shadow 0.3s ease, border 0.4s ease;
+      color: var(--text-primary);
+      border: none;
+    }
+    body.light-theme .accordion-item {
+      box-shadow: 0 10px 30px rgba(0,33,71,0.15);
+      border: 1px solid rgba(177, 138, 0, 0.35);
+    }
+    .accordion-item:hover {
+      background: #394461;
+    }
+    body.light-theme .accordion-item:hover {
+      background: #dce5ef;
+    }
+    .accordion-header {
+      padding: 18px 24px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--text-accent);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      text-shadow: var(--text-shadow-accent);
+      transition: color 0.4s ease, text-shadow 0.4s ease;
+    }
+    .accordion-header::after {
+      content: "›";
+      font-family: 'Arial', sans-serif;
+      font-size: 1.3rem;
+      color: var(--text-accent);
+      transition: transform 0.3s ease, color 0.4s ease;
+      text-shadow: var(--text-shadow-accent);
+    }
+    .accordion-item.active .accordion-header::after {
+      transform: rotate(90deg);
+    }
+    .accordion-content {
+      max-height: 0;
+      padding: 0 24px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #f4f2ee;
+      background: #394461;
+      border-top: 1px solid var(--text-accent);
+      transition: max-height 0.4s ease, padding 0.3s ease, background 0.4s ease, color 0.4s ease;
+      text-shadow: 0 0 3px rgba(0,0,0,0.2);
+      font-weight: 400;
+      overflow-wrap: break-word;
+    }
+    body.light-theme .accordion-content {
+      background: #e1e5e8;
+      color: #121212;
+      border-top-color: var(--text-accent);
+      text-shadow: none;
+    }
+    .accordion-item.active .accordion-content {
+      padding: 20px 24px;
+      max-height: 800px;
+    }
+
+    /* Contact Section */
+    section.contact {
+      background: var(--background-alt);
+      padding: 30px 40px;
+      border-radius: 25px;
+      margin-bottom: 40px;
+      box-shadow: 0 8px 30px rgba(249, 217, 118, 0.25);
+      transition: background 0.4s ease, box-shadow 0.4s ease, border 0.4s ease;
+      color: var(--text-primary);
+      max-width: 900px;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+    section.contact a {
+      color: var(--text-accent);
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    section.contact a:hover,
+    section.contact a:focus {
+      color: var(--text-accent-hover);
+      outline: none;
+      text-decoration: underline;
+    }
+    body.light-theme section.contact {
+      box-shadow: 0 12px 45px rgba(0,33,71,0.18);
+      border: 1px solid rgba(177, 138, 0, 0.3);
+      color: var(--text-primary);
+      background: var(--background-alt-light);
+    }
+
+    /* Support Button */
+    #support-button {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background-color: var(--text-accent);
+      color: var(--background);
+      border: none;
+      border-radius: 50px;
+      padding: 14px 18px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 12px rgba(249, 217, 118, 0.5);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+    }
+    #support-button:hover,
+    #support-button:focus {
+      background-color: var(--text-accent-hover);
+      box-shadow: 0 8px 16px rgba(249, 217, 118, 0.7);
+      outline: none;
+    }
+    #support-button svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--background);
+    }
+
+    /* Modal backdrop Common Styles */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1500;
+    }
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    /* Support Modal window */
+    #support-modal {
+      background-color: var(--card-background);
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+      max-width: 400px;
+      width: 90%;
+      padding: 24px 28px;
+      color: var(--text-primary);
+      font-family: 'Quicksand', sans-serif;
+      position: relative;
+      box-sizing: border-box;
+    }
+    body.light-theme #support-modal {
+      background-color: var(--card-background-light);
+      color: var(--text-primary);
+      box-shadow: 0 12px 45px rgba(0,33,71,0.2);
+    }
+
+    #support-modal h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      color: var(--text-accent);
+      text-shadow: var(--text-shadow-accent);
+      transition: color 0.4s ease, text-shadow 0.4s ease;
+    }
+
+    #support-modal label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    body.light-theme #support-modal label {
+      color: var(--text-primary);
+    }
+
+    #support-modal input[type="text"],
+    #support-modal input[type="email"],
+    #support-modal textarea {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      padding: 10px 12px;
+      font-size: 1rem;
+      margin-bottom: 16px;
+      resize: vertical;
+      font-family: 'Quicksand', sans-serif;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+    #support-modal input[type="text"]:focus,
+    #support-modal input[type="email"]:focus,
+    #support-modal textarea:focus {
+      outline: none;
+      border-color: var(--text-accent);
+      box-shadow: 0 0 6px var(--text-accent);
+    }
+
+    #support-modal textarea {
+      min-height: 80px;
+    }
+
+    #support-modal button[type="submit"] {
+      background-color: var(--text-accent);
+      color: var(--background);
+      border: none;
+      padding: 12px 24px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+    #support-modal button[type="submit"]:hover,
+    #support-modal button[type="submit"]:focus {
+      background-color: var(--text-accent-hover);
+      outline: none;
+    }
+
+    /* Close button */
+    #support-modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    #support-modal-close:hover,
+    #support-modal-close:focus {
+      color: var(--text-accent);
+      outline: none;
+    }
+
+    /* Vote Modal window */
+    #vote-modal {
+      background-color: var(--card-background);
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+      max-width: 450px;
+      width: 90%;
+      padding: 24px 28px;
+      color: var(--text-primary);
+      font-family: 'Quicksand', sans-serif;
+      position: relative;
+      box-sizing: border-box;
+    }
+    body.light-theme #vote-modal {
+      background-color: var(--card-background-light);
+      color: var(--text-primary);
+      box-shadow: 0 12px 45px rgba(0,33,71,0.2);
+    }
+
+    #vote-modal h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      color: var(--text-accent);
+      text-shadow: var(--text-shadow-accent);
+      transition: color 0.4s ease, text-shadow 0.4s ease;
+    }
+
+    #vote-modal label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    body.light-theme #vote-modal label {
+      color: var(--text-primary);
+    }
+
+    #vote-modal input[type="text"],
+    #vote-modal textarea {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      padding: 10px 12px;
+      font-size: 1rem;
+      margin-bottom: 16px;
+      resize: vertical;
+      font-family: 'Quicksand', sans-serif;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+    #vote-modal input[type="text"]:focus,
+    #vote-modal textarea:focus {
+      outline: none;
+      border-color: var(--text-accent);
+      box-shadow: 0 0 6px var(--text-accent);
+    }
+
+    #vote-modal textarea {
+      min-height: 100px;
+    }
+
+    #vote-modal button[type="submit"] {
+      background-color: var(--text-accent);
+      color: var(--background);
+      border: none;
+      padding: 12px 24px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+    #vote-modal button[type="submit"]:hover,
+    #vote-modal button[type="submit"]:focus {
+      background-color: var(--text-accent-hover);
+      outline: none;
+    }
+
+    /* Close button */
+    #vote-modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    #vote-modal-close:hover,
+    #vote-modal-close:focus {
+      color: var(--text-accent);
+      outline: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      header {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding: 30px 20px;
+        text-align: center;
+      }
+      header > h1, header > p, header > div.name {
+        flex: none;
+        text-align: center;
+        margin-left: 0;
+      }
+      #theme-toggle {
+        min-width: 140px;
+      }
+      section.contact {
+        font-size: 1rem;
+        padding: 20px;
+      }
+      #support-modal {
+        max-width: 90%;
+        padding: 16px 20px;
+      }
+      #support-modal h2 {
+        font-size: 1.5rem;
+      }
+      #support-modal button[type="submit"] {
+        font-size: 1rem;
+      }
+      #vote-modal {
+        max-width: 90%;
+        padding: 16px 20px;
+      }
+      #vote-modal h2 {
+        font-size: 1.5rem;
+      }
+      #vote-modal button[type="submit"] {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🌟 Your Head Girl 🌟</h1>
+    <p>Empowering Every Voice, Together!</p>
+    <div class="name">Anweshi Das</div>
+    <button id="theme-toggle" aria-label="Toggle Dark/Light Mode" aria-pressed="false" title="Toggle Dark/Light Mode">Light Mode</button>
+  </header>
+
+  <!-- Vote Button below header -->
+  <button id="vote-button" aria-haspopup="dialog" aria-controls="vote-modal" aria-expanded="false">Vote</button>
+
+  <main>
+    <section class="agendas" aria-label="Campaign Agendas">
+      <h2>My Agendas</h2>
+      <div class="agenda-grid">
+        <div class="agenda-card">
+          <div class="agenda-icon" aria-hidden="true">⏰</div>
+          <div class="agenda-title">Lead by example through punctuality, responsibility, and respect</div>
+          <div class="agenda-explanation" id="exp1">I will consistently follow school rules, be on time, and maintain respectful behavior to inspire others by actions—not just words.</div>
+          <button class="see-more-btn" aria-expanded="false" aria-controls="exp1">See More</button>
+        </div>
+        <div class="agenda-card">
+          <div class="agenda-icon" aria-hidden="true">🤝</div>
+          <div class="agenda-title">Be an approachable and reliable representative for students</div>
+          <div class="agenda-explanation" id="exp2">I will always be available for my classmates to talk to, whether it’s about a concern, an idea, or just someone to listen.</div>
+          <button class="see-more-btn" aria-expanded="false" aria-controls="exp2">See More</button>
+        </div>
+        <div class="agenda-card">
+          <div class="agenda-icon" aria-hidden="true">📣</div>
+          <div class="agenda-title">Communicate student concerns informally to teachers or staff</div>
+          <div class="agenda-explanation" id="exp3">Even if there’s no formal system, I’ll do my best to pass on genuine concerns or suggestions to teachers respectfully when possible.</div>
+          <button class="see-more-btn" aria-expanded="false" aria-controls="exp3">See More</button>
+        </div>
+        <div class="agenda-card">
+          <div class="agenda-icon" aria-hidden="true">🎉</div>
+          <div class="agenda-title">Celebrate and appreciate classmates through kind words and recognition</div>
+          <div class="agenda-explanation" id="exp4">I’ll make sure small efforts and acts of kindness by students don’t go unnoticed—whether it’s a compliment or a quick shout-out in class.</div>
+          <button class="see-more-btn" aria-expanded="false" aria-controls="exp4">See More</button>
+        </div>
+        <div class="agenda-card">
+          <div class="agenda-icon" aria-hidden="true">📬</div>
+          <div class="agenda-title">Spread school updates and important info through face-to-face interactions</div>
+          <div class="agenda-explanation" id="exp5">I’ll ensure classmates are aware of important things happening in school by sharing updates directly, especially when no official announcements are made.</div>
+          <button class="see-more-btn" aria-expanded="false" aria-controls="exp5">See More</button>
+        </div>
+        <div class="agenda-card">
+          <div class="agenda-icon" aria-hidden="true">📰</div>
+          <div class="agenda-title">Assist teachers and staff during school events and assemblies</div>
+          <div class="agenda-explanation" id="exp6">I’ll actively help during school functions, assemblies, and programs, keeping things organized and supporting both teachers and students.</div>
+          <button class="see-more-btn" aria-expanded="false" aria-controls="exp6">See More</button>
+        </div>
+        <div class="agenda-card">
+          <div class="agenda-icon" aria-hidden="true">🎭</div>
+          <div class="agenda-title">Encourage respectful behavior and unity among students</div>
+          <div class="agenda-explanation" id="exp7">I’ll promote teamwork and kindness among classmates, reduce misunderstandings, and help make school a friendly place for everyone.</div>
+          <button class="see-more-btn" aria-expanded="false" aria-controls="exp7">See More</button>
+        </div>
+        <div class="agenda-card">
+          <div class="agenda-icon" aria-hidden="true">🌟</div>
+          <div class="agenda-title">Help create a positive, welcoming atmosphere in school</div>
+          <div class="agenda-explanation" id="exp8">I’ll maintain a cheerful and encouraging attitude, support students who feel left out, and help reduce negativity wherever I can.</div>
+          <button class="see-more-btn" aria-expanded="false" aria-controls="exp8">See More</button>
+        </div>
+        <div class="agenda-card">
+          <div class="agenda-icon" aria-hidden="true">🤗</div>
+          <div class="agenda-title">Be consistently present, visible, and supportive as a leader</div>
+          <div class="agenda-explanation" id="exp9">I’ll be active around the school—during breaks, events, and transitions—so anyone who needs help can easily reach out to me.</div>
+          <button class="see-more-btn" aria-expanded="false" aria-controls="exp9">See More</button>
+        </div>
+        <div class="agenda-card">
+          <div class="agenda-icon" aria-hidden="true">💬</div>
+          <div class="agenda-title">Treat every student equally, ensuring everyone feels included and respected</div>
+          <div class="agenda-explanation" id="exp10">Whether someone is my best friend or not, I’ll treat everyone fairly and respectfully—because a true leader stands for all.</div>
+          <button class="see-more-btn" aria-expanded="false" aria-controls="exp10">See More</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="questions" aria-label="Questions and Answers">
+      <h2>Questions & Answers</h2>
+      <div class="accordion" role="list">
+        <div class="accordion-item" role="listitem" tabindex="0">
+          <div class="accordion-header" aria-expanded="false" aria-controls="ans1" id="q1" role="button">
+            What will you do to ensure every student's voice is heard?
+          </div>
+          <div class="accordion-content" id="ans1" aria-labelledby="q1" hidden>
+            I will set up a suggestion box and hold regular meetings to discuss student concerns and ideas.
+          </div>
+        </div>
+        <div class="accordion-item" role="listitem" tabindex="0">
+          <div class="accordion-header" aria-expanded="false" aria-controls="ans2" id="q2" role="button">
+            How will you promote school spirit?
+          </div>
+          <div class="accordion-content" id="ans2" aria-labelledby="q2" hidden>
+            I plan to organize fun events and activities that encourage participation and celebrate our school community.
+          </div>
+        </div>
+        <div class="accordion-item" role="listitem" tabindex="0">
+          <div class="accordion-header" aria-expanded="false" aria-controls="ans3" id="q3" role="button">
+            What is your approach to communication with staff?
+          </div>
+          <div class="accordion-content" id="ans3" aria-labelledby="q3" hidden>
+            I will ensure transparent communication by sharing updates and feedback from students with the staff regularly.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" aria-label="Contact Information">
+      <h2>Contact</h2>
+      <p>If you want to get in touch, feel free to contact me at: <a href="mailto:dasanweshi08@gmail.com">dasanweshi08@gmail.com</a></p>
+    </section>
+
+  </main>
+
+  <footer>
+    &copy; 2025 Head Girl Campaign. Together We Thrive! <span aria-label="sparkle" role="img">✨</span>
+  </footer>
+
+  <!-- Support Button -->
+  <button id="support-button" aria-label="Open Support Form" title="Support">
+    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12c0 1.348.321 2.622.888 3.755L2.53 21.699a.75.75 0 001.03.971l5.084-3.225A9.963 9.963 0 0012 22zm.25-5.75a.75.75 0 11-1.5 0v-4.5a.75.75 0 011.5 0v4.5zm0-6a1 1 0 11-2 0 1 1 0 012 0z"/>
+    </svg>
+    Support
+  </button>
+
+  <!-- Support Modal -->
+  <div id="support-modal-backdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="support-modal-title">
+    <div id="support-modal" role="document">
+      <button id="support-modal-close" aria-label="Close Support Form">&times;</button>
+      <h2 id="support-modal-title">Support</h2>
+      <form id="support-form">
+        <label for="support-name">Name (optional):</label>
+        <input type="text" id="support-name" name="name" placeholder="Your name" autocomplete="name" />
+
+        <label for="support-email">Email:</label>
+        <input type="email" id="support-email" name="email" placeholder="your.email@example.com" required autocomplete="email" />
+
+        <label for="support-message">Your Message:</label>
+        <textarea id="support-message" name="message" placeholder="How can I help?" rows="4" required></textarea>
+
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Vote Modal -->
+  <div id="vote-modal-backdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="vote-modal-title">
+    <div id="vote-modal" role="document">
+      <button id="vote-modal-close" aria-label="Close Vote Form">&times;</button>
+      <h2 id="vote-modal-title">Vote and Suggestions</h2>
+      <form id="vote-form">
+        <label for="voter-name">Name:</label>
+        <input type="text" id="voter-name" name="voter-name" placeholder="Your name" required autocomplete="name" />
+
+        <label for="voter-class">Class:</label>
+        <input type="text" id="voter-class" name="voter-class" placeholder="Your class (e.g., 9B)" required />
+
+        <label for="vote-suggestion">Your Suggestion:</label>
+        <textarea id="vote-suggestion" name="vote-suggestion" placeholder="Write your suggestion here..." rows="5" required></textarea>
+
+        <button type="submit">Submit Vote</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Accordion functionality
+      const accordions = document.querySelectorAll('.accordion-item');
+
+      accordions.forEach(acc => {
+        const header = acc.querySelector('.accordion-header');
+        const content = acc.querySelector('.accordion-content');
+
+        header.addEventListener('click', () => {
+          const isExpanded = header.getAttribute('aria-expanded') === 'true' || false;
+
+          accordions.forEach(item => {
+            item.classList.remove('active');
+            item.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+            item.querySelector('.accordion-content').hidden = true;
+          });
+
+          if (!isExpanded) {
+            acc.classList.add('active');
+            header.setAttribute('aria-expanded', 'true');
+            content.hidden = false;
+          }
+        });
+
+        acc.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            header.click();
+          }
+        });
+      });
+
+      // See more toggle
+      const seeMoreButtons = document.querySelectorAll('.see-more-btn');
+      seeMoreButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const explanation = document.getElementById(button.getAttribute('aria-controls'));
+          const expanded = button.getAttribute('aria-expanded') === 'true';
+          if (expanded) {
+            explanation.classList.remove('expanded');
+            button.textContent = 'See More';
+            button.setAttribute('aria-expanded', 'false');
+          } else {
+            explanation.classList.add('expanded');
+            button.textContent = 'See Less';
+            button.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+
+      // Dark/light mode toggle
+      const themeToggleBtn = document.getElementById('theme-toggle');
+      const body = document.body;
+
+      function setTheme(isLight) {
+        if (isLight) {
+          body.classList.add('light-theme');
+          themeToggleBtn.textContent = 'Dark Mode';
+          themeToggleBtn.setAttribute('aria-pressed', 'true');
+        } else {
+          body.classList.remove('light-theme');
+          themeToggleBtn.textContent = 'Light Mode';
+          themeToggleBtn.setAttribute('aria-pressed', 'false');
+        }
+      }
+
+      const savedTheme = localStorage.getItem('theme');
+      const useLightTheme = savedTheme === 'light';
+      setTheme(useLightTheme);
+
+      themeToggleBtn.addEventListener('click', () => {
+        const isLight = body.classList.contains('light-theme');
+        setTheme(!isLight);
+        localStorage.setItem('theme', !isLight ? 'light' : 'dark');
+      });
+
+      // Support Button & Modal
+      const supportButton = document.getElementById('support-button');
+      const supportModalBackdrop = document.getElementById('support-modal-backdrop');
+      const supportModalClose = document.getElementById('support-modal-close');
+      const supportForm = document.getElementById('support-form');
+      const firstSupportInput = document.getElementById('support-name');
+
+      supportButton.addEventListener('click', () => {
+        supportModalBackdrop.classList.add('show');
+        firstSupportInput.focus();
+        document.body.style.overflow = 'hidden';
+      });
+
+      function closeSupportModal() {
+        supportModalBackdrop.classList.remove('show');
+        supportButton.focus();
+        document.body.style.overflow = '';
+      }
+
+      supportModalClose.addEventListener('click', closeSupportModal);
+
+      supportModalBackdrop.addEventListener('click', e => {
+        if (e.target === supportModalBackdrop) closeSupportModal();
+      });
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && supportModalBackdrop.classList.contains('show')) {
+          closeSupportModal();
+        }
+      });
+
+      supportForm.addEventListener('submit', e => {
+        e.preventDefault();
+        alert('Thank you for your message! We will get back to you soon.');
+        supportForm.reset();
+        closeSupportModal();
+      });
+
+      // Vote Button & Modal
+      const voteButton = document.getElementById('vote-button');
+      const voteModalBackdrop = document.getElementById('vote-modal-backdrop');
+      const voteModalClose = document.getElementById('vote-modal-close');
+      const voteForm = document.getElementById('vote-form');
+      const firstVoteInput = document.getElementById('voter-name');
+
+      voteButton.addEventListener('click', () => {
+        voteModalBackdrop.classList.add('show');
+        firstVoteInput.focus();
+        voteButton.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      });
+
+      function closeVoteModal() {
+        voteModalBackdrop.classList.remove('show');
+        voteButton.setAttribute('aria-expanded', 'false');
+        voteButton.focus();
+        document.body.style.overflow = '';
+      }
+
+      voteModalClose.addEventListener('click', closeVoteModal);
+
+      voteModalBackdrop.addEventListener('click', e => {
+        if (e.target === voteModalBackdrop) closeVoteModal();
+      });
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && voteModalBackdrop.classList.contains('show')) {
+          closeVoteModal();
+        }
+      });
+
+      voteForm.addEventListener('submit', e => {
+        e.preventDefault();
+        alert('Thank you for voting and your suggestion!');
+        voteForm.reset();
+        closeVoteModal();
+      });
+    });
+  </script>
+</body>
+</html>
+
